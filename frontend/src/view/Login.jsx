@@ -44,7 +44,7 @@ function Login() {
       setUser(json.accessToken);
       navigate('/home');
     }).catch((err) => {
-      alert('Error logging in, please try again');
+      console.log('Error logging in, please try again');
     });
   };
   return (
