@@ -57,6 +57,29 @@ paths:
           description: Bad Request
         403:
           description: Forbidden
+  /post/{postId}/like:
+    post:
+      description: Like a post
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        201:
+          description: Post liked successfully
+        401:
+          description: Unauthorized (Access token missing or expired)
+        404:
+          description: Post not found
+        409:
+          description: Post already liked
+        500:
+          description: Server error
   /group:
     get:
       description: Get users groups
@@ -106,6 +129,9 @@ components:
     Post:
       type: object
       properties:
+        id: 
+          type: string
+          format: uuid
         img:
           type: string
         created:
@@ -116,6 +142,11 @@ components:
           maxLength: 300
         author:
           type: string
+        likes:
+          type: array
+          items:
+            type: string
+            format: uuid
       required:
         - img
         - created
