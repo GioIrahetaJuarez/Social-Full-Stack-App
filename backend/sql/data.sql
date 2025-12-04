@@ -12,12 +12,12 @@ DELETE FROM creds;          -- Delete this LAST (parent table)
 -- mshmitt waitimgoated
 -- sam waitimdelusional
 INSERT INTO creds (id, data) VALUES 
-  ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '{"username":"diraheta@ucsc.edu", "password":"$2a$12$gwiiEhJownX5acn6OzNITegy1mS5bUgrcFHNuFhyO3E0zA.gH5TtS", "name":"dilbert"}'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', '{"username":"molly@books.com", "password":"$2a$12$Q1j5BpzrZJyX9r4H6UM97Ot5uO99IBep1pBEuh/CToDgtZe3HkfMi", "name":"molly"}'),
-  ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', '{"username":"anna@books.com", "password":"$2a$12$G0XYSc6oqPoQT/kgto64kettDT1CanBEa4bmtoB9Tf60RHTREzGKa", "name":"anna"}'),
-  ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', '{"username":"professor@ucsc.edu", "password":"$2a$12$yF9aLsyiFZ3aQGm1l5MDFufBSa.z02z6IZvH4WeX3G5iPN6VXP5X6", "name":"professor"}'),
-  ('e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', '{"username":"mshmitt@ucsc.edu", "password":"$2a$12$X39cqAc8AcsFNUBCW6ppEOvCIsOI3.EP8o79lJl7KFZtYIM4wzJpu", "name":"micah"}'),
-  ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', '{"username":"sam@snapchat.com", "password":"$2a$12$tlm.cBN3F.pxLq0t9zyiFObUExVso4OReiomAIHhzPGF5eM5ui3Ha", "name":"sam"}');
+  ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '{"username":"diraheta@ucsc.edu", "password":"$2a$12$gwiiEhJownX5acn6OzNITegy1mS5bUgrcFHNuFhyO3E0zA.gH5TtS", "name":"dilbert", "likes":[]}'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380a22', '{"username":"molly@books.com", "password":"$2a$12$Q1j5BpzrZJyX9r4H6UM97Ot5uO99IBep1pBEuh/CToDgtZe3HkfMi", "name":"molly", "likes":[]}'),
+  ('c0eebc99-9c0b-4ef8-bb6d-6bb9bd380a33', '{"username":"anna@books.com", "password":"$2a$12$G0XYSc6oqPoQT/kgto64kettDT1CanBEa4bmtoB9Tf60RHTREzGKa", "name":"anna", "likes":[]}'),
+  ('d0eebc99-9c0b-4ef8-bb6d-6bb9bd380a44', '{"username":"professor@ucsc.edu", "password":"$2a$12$yF9aLsyiFZ3aQGm1l5MDFufBSa.z02z6IZvH4WeX3G5iPN6VXP5X6", "name":"professor", "likes":[]}'),
+  ('e0eebc99-9c0b-4ef8-bb6d-6bb9bd380a55', '{"username":"mshmitt@ucsc.edu", "password":"$2a$12$X39cqAc8AcsFNUBCW6ppEOvCIsOI3.EP8o79lJl7KFZtYIM4wzJpu", "name":"micah", "likes":[]}'),
+  ('f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a66', '{"username":"sam@snapchat.com", "password":"$2a$12$tlm.cBN3F.pxLq0t9zyiFObUExVso4OReiomAIHhzPGF5eM5ui3Ha", "name":"sam", "likes":[]}');
 
 INSERT INTO socialgroup (id, owner, data) VALUES 
   ('10000000-0000-0000-0000-000000000001', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11', '{"name":"People I like"}'),
