@@ -1,0 +1,141 @@
+#
+# CSE186 Assignment 8 Backend
+#
+
+openapi: '3.0.3'
+
+info:
+  description: CSE186 Assignment 8 Backend
+  version: 0.2.0
+  title: CSE186 Assignment 8 Backend
+
+servers:
+  - url: http://localhost:3010/api/v0
+
+paths:
+  /login:
+    post:
+      description: Login
+      requestBody:
+        description: Request Body
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        200:
+          description: Successful Match
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized (Access token missing or expired)
+  /post:
+    get:
+      description: Send posts
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: query
+          required: false
+          schema: 
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Send posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Post'
+        400: 
+          description: Bad Request
+        403:
+          description: Forbidden
+  /group:
+    get:
+      description: Get users groups
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: Sent users groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Group'
+        400: 
+          description: Bad Request
+        401:
+          description: Unathorized (Access token missing or expired)
+        403:
+          description: Forbidden
+
+components:
+  schemas:
+    Credentials:
+      type: object
+      properties:
+        username:
+          type: string
+          format: email
+        password:
+          type: string
+        name:
+          type: string
+      required:
+        - username
+        - password
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        accessToken:
+          type: string
+      required:
+        - name
+        - accessToken
+    Post:
+      type: object
+      properties:
+        img:
+          type: string
+        created:
+          type: string
+          format: date-time
+        text:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+      required:
+        - img
+        - created
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner:
+          type: string
+          format: uuid
+        name:
+          type: string
+      required:
+        - id
+        - owner
+        - name
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
