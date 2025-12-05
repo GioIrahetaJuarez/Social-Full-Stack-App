@@ -6,13 +6,18 @@ const dilbertCredentials = {
   password: 'arealpassword',
 };
 
-test('LOGIN accepts valid user', async () => {
-  await typeIn(page, 'input[name="username"]', dilbertCredentials.username);
-  await typeIn(page, 'input[name="password"]', dilbertCredentials.password);
-  await clickOn(page, '::-p-text(Log in)');
-  const logoutButton = await getText(page, '::-p-text(Logout)');
-  expect(logoutButton).toBeTruthy();
-}, 20000);
+// Basic tests ----------------------------------------------------------
+
+// test('LOGIN rejects empty username', async () => {
+//   await typeIn(page, 'input[name="password"]', 'somepassword');
+//   await clickOn(page, '::-p-text(Log in)');
+
+//   const errorMsg = await getText(page, '.error, [role="alert"]');
+//   expect(errorMsg).toBeTruthy();
+
+//   const logoutText = await getText(page, '::-p-text(Logout)');
+//   expect(logoutText).toBeNull();
+// }, 20000);
 
 test('LOGIN rejects invalid user', async () => {
   await typeIn(page, 'input[name="username"]', 'johnpork');
@@ -22,11 +27,48 @@ test('LOGIN rejects invalid user', async () => {
   expect(loginButton).toBeTruthy();
 }, 20000);
 
+// test('LOGIN handles very long input strings', async () => {
+//   const longString = 'a'.repeat(1000);
+//   await performLogin(longString, longString);
+//   await page.waitForTimeout(1000);
+
+//   const logoutText = await getText(page, '::-p-text(Logout)');
+//   expect(logoutText).toBeNull();
+// }, 20000);
+
+test('LOGIN accepts valid user', async () => {
+  await typeIn(page, 'input[name="username"]', dilbertCredentials.username);
+  await typeIn(page, 'input[name="password"]', dilbertCredentials.password);
+  await clickOn(page, '::-p-text(Log in)');
+  const logoutButton = await getText(page, '::-p-text(Logout)');
+  expect(logoutButton).toBeTruthy();
+}, 20000);
+
 test('LOGOUT user', async () => {
-  await typeIn(page, 'input[name="username"]', 'diraheta@ucsc.edu');
-  await typeIn(page, 'input[name="password"]', 'arealpassword');
+  await typeIn(page, 'input[name="username"]', dilbertCredentials.username);
+  await typeIn(page, 'input[name="password"]', dilbertCredentials.password);
   await clickOn(page, '::-p-text(Log in)');
   await clickOn(page, '::-p-text(Logout)');
   const loginButton = await getText(page, '::-p-text(Log in)');
   expect(loginButton).toBeTruthy();
 }, 20000);
+
+// Security Tests --------------------------------------------------------
+
+test('LOGIN prevents SQL injection attempts', async () => {
+  const sqlInjections = [
+    'admin\' OR \'1\'=\'1',
+    'diraheta@ucsc.edu\'--',
+    '\' OR 1=1--',
+  ];
+
+  for (const injection of sqlInjections) {
+    await typeIn(page, 'input[name="username"]', injection);
+    await typeIn(page, 'input[name="password"]', dilbertCredentials.password);
+    await clickOn(page, '::-p-text(Log in)');
+
+    const logoutText = await getText(page, '::-p-text(Logout)');
+    expect(logoutText).toBeNull();
+  }
+}, 30000);
+
