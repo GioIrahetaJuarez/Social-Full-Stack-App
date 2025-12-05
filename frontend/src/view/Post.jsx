@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import {red} from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 
@@ -20,17 +20,35 @@ import PropTypes from 'prop-types';
  */
 function Post(props) {
   const [likeCount, setLikeCount] = useState(0);
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const res = await fetch(
+          `http://localhost:3010/api/v0/post/${props.data.id}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+            },
+          },
+      );
+      if (!res.ok) {
+        return;
+      }
+      const json = await res.json();
+      setLikeCount(json.likes.length);
+    };
+    fetchLikes();
+  }, [props.data.id]);
   const addLike = async () => {
-    await fetch(
+    const res = await fetch(
         `http://localhost:3010/api/v0/post/${props.data.id}/like`, {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
           },
         },
     );
-
-    setLikeCount(1);
+    const json = await res.json();
+    setLikeCount(json.length);
   };
   return (
     <Card sx={{maxWidth: 345}}>
@@ -52,7 +70,7 @@ function Post(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="like" onClick={addLike}>
+        <IconButton aria-label="Like" onClick={addLike}>
           <FavoriteIcon/>
         </IconButton>
         <Typography variant="body2" sx={{color: 'text.secondary'}}>

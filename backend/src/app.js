@@ -53,6 +53,7 @@ app.use(
 // Create additional modules and delegate to their exports.
 app.post('/api/v0/login', login.findCredentials);
 app.get('/api/v0/post', check, post.getPosts);
+app.get('/api/v0/post/:postId', check, post.getPost);
 app.get('/api/v0/group', check, group.getGroups);
 app.post('/api/v0/post/:postId/like', check, post.putLike);
 

@@ -116,6 +116,9 @@ const server = setupServer(
         ], {status: 200});
       }
     }),
+    http.get('http://localhost:3010/api/v0/post/:postId', async () => {
+      return HttpResponse.json(null, {status: 404});
+    }),
     http.get('http://localhost:3010/api/v0/group', async () => {
       return HttpResponse.json([
         {

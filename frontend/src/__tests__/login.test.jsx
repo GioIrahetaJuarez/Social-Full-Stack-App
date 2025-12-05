@@ -53,6 +53,9 @@ const server = setupServer(
         {img: 'https://upload.wikimedia.org/wikipedia/en/6/6e/Big_Guy.jpg', created: '2025-11-27T21:42:30.000Z'},
       ], {status: 200});
     }),
+    http.get('http://localhost:3010/api/v0/post/:postId', async () => {
+      return HttpResponse.json(null, {status: 404});
+    }),
 );
 
 beforeAll(() => server.listen());

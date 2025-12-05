@@ -39,7 +39,14 @@ export async function findPosts(groupId) {
  */
 export async function findPost(postId) {
   const select = {
-    text: 'SELECT data FROM post WHERE id = $1',
+    text: `
+    SELECT
+      post.id,
+      (post.data - 'socialgroup') AS data,
+      creds.data->>'name' as author
+    FROM post
+    LEFT JOIN creds ON post.author = creds.id
+    WHERE post.id = $1`,
     values: [postId],
   };
 
@@ -49,7 +56,12 @@ export async function findPost(postId) {
     return null;
   }
 
-  const post = rows[0].data;
+  const row = rows[0];
+  const post = {
+    id: row.id,
+    author: row.author,
+    ...row.data,
+  };
   return post;
 }
 

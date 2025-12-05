@@ -72,11 +72,13 @@ const server = setupServer(
       if (groupId === '10000000-0000-0000-0000-000000000001') {
         return HttpResponse.json([
           {
+            id: 'a1000000-0000-0000-0000-00000000000a',
             img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_earthly_delights.jpg/1200px-The_Garden_of_earthly_delights.jpg',
             created: '2025-11-28T15:30:00.000Z',
             text: '1 Post in group A',
           },
           {
+            id: 'a2000000-0000-0000-0000-00000000000a',
             img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/The_Garden_of_earthly_delights.jpg/1200px-The_Garden_of_earthly_delights.jpg',
             created: '2025-11-28T15:30:00.000Z',
             text: '2 Post in group A',
@@ -85,6 +87,7 @@ const server = setupServer(
       } else if (groupId === '20000000-0000-0000-0000-000000000002') {
         return HttpResponse.json([
           {
+            id: 'b1000000-0000-0000-0000-00000000000b',
             img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Stylised_atom_with_three_Bohr_model_orbits_and_stylised_nucleus.svg/250px-Stylised_atom_with_three_Bohr_model_orbits_and_stylised_nucleus.svg.png',
             created: '2025-11-29T10:15:00.000Z',
             text: 'Post in group B',
@@ -93,22 +96,28 @@ const server = setupServer(
       } else {
         return HttpResponse.json([
           {
+            id: 'p1000000-0000-0000-0000-00000000000p',
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIB6ys-cWBryrjVnEfYf186eNMAximvWgtxQ&s',
             created: '2025-11-30T21:42:30.526Z',
-            text: 'grah',
+            text: 'Public 1',
           },
           {
+            id: 'p2000000-0000-0000-0000-00000000000p',
             img: 'https://www.rap-up.com/article/media_1fbb4297d00311931c2f90bc5fe65e80883ea13db.png?width=800&format=png&optimize=high',
             created: '2025-11-27T21:42:30.000Z',
-            text: 'hey freakbob here',
+            text: 'Public 2',
           },
           {
+            id: 'p3000000-0000-0000-0000-00000000000p',
             img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSurlBct6TRfGQDnkt3SHufWvVfdN6MEmOc2A',
             created: '2025-01-08T21:42:30.000Z',
-            text: 'wait im healing',
+            text: 'Public 3',
           },
         ], {status: 200});
       }
+    }),
+    http.get('http://localhost:3010/api/v0/post/:postId', async () => {
+      return HttpResponse.json(null, {status: 404});
     }),
     http.get('http://localhost:3010/api/v0/group', async () => {
       return HttpResponse.json([
@@ -178,6 +187,19 @@ test('GROUPLIST contains group B', async () => {
   );
   const groupButton = await screen.findByText('B');
   expect(groupButton).not.toBeNull;
+});
+
+test('GROUPLIST Doesnt render when no group available', async () => {
+  server.use(
+      http.get('http://localhost:3010/api/v0/group', async () => {
+        return HttpResponse.json([], {status: 200});
+      }),
+  );
+  render(
+      <GroupMockProvider initialEntries={['/home']}>
+        <Route path='/home' element={<GroupList/>}/>
+      </GroupMockProvider>,
+  );
 });
 
 // Feed Tests----------------------------------------------------
