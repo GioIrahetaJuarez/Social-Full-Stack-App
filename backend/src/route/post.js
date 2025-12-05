@@ -29,7 +29,7 @@ export async function getPost(req, res) {
   // Check privacy?
   const hasAccess = await model.accessPost(postId, userId);
   if (!hasAccess) {
-    return res.status(403).json({error: 'Forbidden'});
+    return res.status(403).send();
   }
 
   res.status(200).json(post);
@@ -54,7 +54,7 @@ export async function putLike(req, res) {
   // // Check privacy of post
   const hasAccess = await model.accessPost(postId, userId);
   if (!hasAccess) {
-    return res.status(403).json({error: 'Forbidden'});
+    return res.status(403).send();
   }
 
   // Perform like

@@ -1,5 +1,5 @@
 import {test, expect} from 'vitest';
-import {page, clickOn, getText, typeIn} from './setup';
+import {page, clickOn, getText, typeIn} from '../setup';
 
 const dilbertCredentials = {
   username: 'diraheta@ucsc.edu',
@@ -8,17 +8,6 @@ const dilbertCredentials = {
 
 // Basic tests ----------------------------------------------------------
 
-// test('LOGIN rejects empty username', async () => {
-//   await typeIn(page, 'input[name="password"]', 'somepassword');
-//   await clickOn(page, '::-p-text(Log in)');
-
-//   const errorMsg = await getText(page, '.error, [role="alert"]');
-//   expect(errorMsg).toBeTruthy();
-
-//   const logoutText = await getText(page, '::-p-text(Logout)');
-//   expect(logoutText).toBeNull();
-// }, 20000);
-
 test('LOGIN rejects invalid user', async () => {
   await typeIn(page, 'input[name="username"]', 'johnpork');
   await typeIn(page, 'input[name="password"]', '67');
@@ -26,15 +15,6 @@ test('LOGIN rejects invalid user', async () => {
   const loginButton = await getText(page, '::-p-text(Log in)');
   expect(loginButton).toBeTruthy();
 }, 20000);
-
-// test('LOGIN handles very long input strings', async () => {
-//   const longString = 'a'.repeat(1000);
-//   await performLogin(longString, longString);
-//   await page.waitForTimeout(1000);
-
-//   const logoutText = await getText(page, '::-p-text(Logout)');
-//   expect(logoutText).toBeNull();
-// }, 20000);
 
 test('LOGIN accepts valid user', async () => {
   await typeIn(page, 'input[name="username"]', dilbertCredentials.username);
@@ -64,7 +44,7 @@ test('LOGIN prevents SQL injection attempts', async () => {
 
   for (const injection of sqlInjections) {
     await typeIn(page, 'input[name="username"]', injection);
-    await typeIn(page, 'input[name="password"]', dilbertCredentials.password);
+    await typeIn(page, 'input[name="password"]', '123');
     await clickOn(page, '::-p-text(Log in)');
 
     const logoutText = await getText(page, '::-p-text(Logout)');

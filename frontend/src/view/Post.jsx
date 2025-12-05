@@ -51,7 +51,7 @@ function Post(props) {
     setLikeCount(json.length);
   };
   return (
-    <Card sx={{maxWidth: 345}}>
+    <Card sx={{maxWidth: 345}} aria-label="post">
       <CardHeader avatar={
         <Avatar sx={{bgcolor: red[500]}}>
             U
@@ -73,7 +73,8 @@ function Post(props) {
         <IconButton aria-label="Like" onClick={addLike}>
           <FavoriteIcon/>
         </IconButton>
-        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+        <Typography variant="body2"
+          sx={{color: 'text.secondary'}} aria-label="likecount">
           {likeCount}
         </Typography>
       </CardActions>

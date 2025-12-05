@@ -25,10 +25,9 @@ export async function findPosts(groupId) {
   const {rows} = await pool.query(query);
   const parsedRows = rows.map((row) => ({
     ...row,
-    likes: row.likes ? JSON.parse(row.likes) : [],
+    likes: JSON.parse(row.likes),
   }));
 
-  console.log(parsedRows);
   return parsedRows;
 }
 
@@ -89,7 +88,6 @@ export async function accessPost(postId, userId) {
     WHERE p.id = $1
   `;
   const {rows} = await pool.query(query, [postId, userId]);
-  if (rows.length === 0) return false;
 
   const {socialgroup, isOwner, isMember} = rows[0];
   return socialgroup === null || isOwner || isMember;

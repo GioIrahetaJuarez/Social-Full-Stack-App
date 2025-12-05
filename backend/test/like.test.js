@@ -19,6 +19,11 @@ const goodCredentials = {
   password: 'arealpassword',
 };
 
+const samCredentials = {
+  username: 'sam@snapchat.com',
+  password: 'waitimdelusional',
+};
+
 beforeAll(async () => {
   server = http.createServer(app);
   //   wss = new WebSocketServer({server});
@@ -53,3 +58,26 @@ test('POST like', async () => {
       .set('Authorization', `Bearer ${token}`)
       .expect(201);
 });
+
+test('POST like on missing post', async () => {
+  const postId = '00000000-0000-0000-0000-000000000000';
+  await request.post(`/api/v0/post/${postId}/like`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404);
+});
+
+test('POST like on unauthorized post', async () => {
+  const loginResponse = await request.post('/api/v0/login')
+      .send(samCredentials);
+  const samsToken = loginResponse.body.accessToken;
+  const dilbertGroupResponse = await request.get(`/api/v0/group`)
+      .set('Authorization', `Bearer ${token}`);
+  const firstGroup = dilbertGroupResponse.body[0].id;
+  const groupPosts = await request.get(`/api/v0/post?groupId=${firstGroup}`)
+      .set('Authorization', `Bearer ${token}`);
+  const firstPostId = groupPosts.body[0].id;
+  await request.post(`/api/v0/post/${firstPostId}/like`)
+      .set('Authorization', `Bearer ${samsToken}`)
+      .expect(403);
+});
+

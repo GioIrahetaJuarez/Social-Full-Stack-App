@@ -1,5 +1,5 @@
 import {test, expect} from 'vitest';
-import {page, clickOn, typeIn} from './setup';
+import {page, clickOn, typeIn} from '../setup';
 
 test('HOME displays posts', async () => {
   await typeIn(page, 'input[name="username"]', 'diraheta@ucsc.edu');

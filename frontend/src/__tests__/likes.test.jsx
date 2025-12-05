@@ -35,8 +35,9 @@ test('Post renders intial likes', async () => {
   render(
       <Post data={postData}/>,
   );
-  const likeCount = await screen.findByText('0');
+  const likeCount = await screen.findByLabelText('likecount');
   expect(likeCount).toBeInTheDocument();
+  expect(likeCount).toHaveTextContent('0');
 });
 
 test('Post renders updated likes', async () => {
@@ -45,6 +46,6 @@ test('Post renders updated likes', async () => {
   );
   const likeButton = await screen.findByLabelText('Like');
   await userEvent.click(likeButton);
-  const likeCount = await screen.findByText('1');
-  expect(likeCount).toBeInTheDocument();
+  const likeCount = await screen.findByLabelText('likecount');
+  expect(likeCount).toHaveTextContent('1');
 });
