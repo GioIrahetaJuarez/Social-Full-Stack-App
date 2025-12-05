@@ -12,7 +12,7 @@ export async function findPosts(groupId) {
       post.data->>'img' as img,
       post.data->>'text' as text, 
       post.data->>'created' as created,
-      post.data->'likes' as likes,
+      post.data->>'likes' as likes,
       creds.data->>'name' as author
     FROM post
     LEFT JOIN creds ON post.author = creds.id
@@ -23,8 +23,64 @@ export async function findPosts(groupId) {
     ...(groupId != null && {values: [groupId]}),
   };
   const {rows} = await pool.query(query);
-  console.log(rows);
-  return rows;
+  const parsedRows = rows.map((row) => ({
+    ...row,
+    likes: row.likes ? JSON.parse(row.likes) : [],
+  }));
+
+  console.log(parsedRows);
+  return parsedRows;
+}
+
+/**
+ * Find single post
+ * @param {string} postId - UUID
+ * @returns {object} r
+ */
+export async function findPost(postId) {
+  const select = {
+    text: 'SELECT data FROM post WHERE id = $1',
+    values: [postId],
+  };
+
+  const {rows} = await pool.query(select);
+  // If not found
+  if (rows.length == 0) {
+    return null;
+  }
+
+  const post = rows[0].data;
+  return post;
+}
+
+/**
+ * With help of chatGPT
+ * @param {string} postId - UUID
+ * @param {string} userId - UUID
+ * @returns {boolean} r
+ */
+export async function accessPost(postId, userId) {
+  const query = `
+    SELECT 
+      (p.data->>'socialgroup') AS socialgroup,
+      EXISTS(
+        SELECT 1 FROM socialgroup sg
+        WHERE sg.id = (p.data->>'socialgroup')::uuid
+          AND sg.owner = $2::uuid
+      ) AS "isOwner",
+      EXISTS(
+        SELECT 1 FROM memberingroup m
+        WHERE m.member = $2::uuid
+          AND m.socialgroup = (p.data->>'socialgroup')::uuid
+      ) AS "isMember"
+    FROM post p
+    WHERE p.id = $1
+  `;
+  const {rows} = await pool.query(query, [postId, userId]);
+  if (rows.length === 0) return false;
+
+  const {socialgroup, isOwner, isMember} = rows[0];
+  return socialgroup === null || isOwner || isMember;
 }
 
 /**
@@ -40,11 +96,6 @@ export async function putLike(postId, userId) {
   };
 
   const {rows} = await pool.query(select);
-
-  // If not found
-  // if (rows.length == 0) {
-  //   return 404;
-  // }
 
   const post = rows[0].data;
 

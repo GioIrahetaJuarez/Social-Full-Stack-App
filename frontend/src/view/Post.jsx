@@ -21,16 +21,16 @@ import PropTypes from 'prop-types';
 function Post(props) {
   const [likeCount, setLikeCount] = useState(0);
   const addLike = async () => {
-    const res = await fetch(
-          `http://localhost:3010/api/v0/post/${props.data.id}/like`, {
-            method: 'PUT',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-            },
+    await fetch(
+        `http://localhost:3010/api/v0/post/${props.data.id}/like`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
           },
-      );
-    const json = await res.json();
-    setLikeCount(json.likes.length);
+        },
+    );
+
+    setLikeCount(1);
   };
   return (
     <Card sx={{maxWidth: 345}}>
@@ -39,7 +39,7 @@ function Post(props) {
             U
         </Avatar>
       }
-      title={`Post by ${props.data.author_name}`}
+      title={`Post by ${props.data.author}`}
       subheader={formatDate(props.data.created)}
       />
       <CardMedia component="img"

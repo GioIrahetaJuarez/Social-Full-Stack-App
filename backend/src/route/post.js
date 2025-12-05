@@ -15,10 +15,25 @@ export async function getPosts(req, res) {
  * Put Like
  * @param {object} req too
  * @param {object} res no
+ * @returns {object} help me
  */
 export async function putLike(req, res) {
   const postId = req.params.postId;
   const userId = req.user.id;
-  await model.putLike(postId, userId);
-  res.sendStatus(201);
+
+  // Check existense of post
+  const found = await model.findPost(postId);
+  if (!found) {
+    return res.status(404).send();
+  }
+
+  // // Check privacy of post
+  const hasAccess = await model.accessPost(postId, userId);
+  if (!hasAccess) {
+    return res.status(403).json({error: 'Forbidden'});
+  }
+
+  // Perform like
+  const post = await model.putLike(postId, userId);
+  return res.status(201).json(post.likes);
 }
