@@ -1,13 +1,3 @@
-/*
-#######################################################################
-#
-# Copyright (C) 2020-2025 David C. Harrison. All right reserved.
-#
-# You may not use, distribute, publish, or modify this code without
-# the express written permission of the copyright holder.
-#
-#######################################################################
-*/
 import express from 'express';
 import cors from 'cors';
 import yaml from 'js-yaml';
@@ -34,12 +24,9 @@ const apiSpec = path.join(__dirname, '../api/openapi.yaml');
 const apidoc = yaml.load(fs.readFileSync(apiSpec, 'utf8'));
 app.use('/api/v0/docs', swaggerUi.serve, swaggerUi.setup(apidoc));
 
-// Allow connections from a non common origin so dev and preview
-// UIs can connect
-app.use(cors(
-    {origin: 'http://localhost:3000'},
-    {origin: 'http://localhost:4173'},
-));
+app.use(cors({
+    origin: ['http://localhost:3000', 'http://localhost:4173']
+}));
 
 app.use(
     OpenApiValidator.middleware({
@@ -49,8 +36,6 @@ app.use(
     }),
 );
 
-// Your routes go here; however, do NOT write then inline.
-// Create additional modules and delegate to their exports.
 app.post('/api/v0/login', login.findCredentials);
 app.get('/api/v0/post', check, post.getPosts);
 app.get('/api/v0/post/:postId', check, post.getPost);

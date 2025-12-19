@@ -1,10 +1,10 @@
 {
-  "name": "cse186-assignment8-e2e",
+  "name": "socialmedia-e2e",
   "type": "module",
   "version": "4.0.0",
-  "description": "CSE186 Assignment 8 - End to End Test",
-  "author": "David Harrison <dcharris@ucsc.edu>",
-  "license": "UNLICENSED",
+  "description": "Social-Media-EndToEnd-Tests",
+  "author": "Gio Iraheta",
+  "license": "MIT",
   "repository": "none",
   "devDependencies": {
     "dotenv": "*",

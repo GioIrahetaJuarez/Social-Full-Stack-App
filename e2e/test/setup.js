@@ -41,13 +41,6 @@ afterAll(async () => {
 beforeEach(async () => {
   browser = await puppeteer.launch({
     headless: true,
-    /*
-     * Use these two settings instead of the one above if you want to see the
-     * browser. However, in the grading system e2e test run headless, so make
-     * sure they work that way before submitting.
-     */
-    // headless: false,
-    // slowMo: 100,
   });
   page = await browser.newPage();
   await page.goto('http://localhost:3000');
@@ -82,6 +75,7 @@ export const getText = async (p, selector) => {
     return null;
   }
 };
+
 // wait for change function with the help of Copilot
 export const waitForTextChange = async (p, selector, initialText, timeout) => {
   const defaultTimeout = timeout || 5000;
