@@ -1,12 +1,20 @@
 import * as model from '../model/post.js';
+import * as modelgroup from '../model/group.js';
 
 /**
  * Get Posts
  * @param {object} req too
  * @param {object} res no
+ * @returns {object} hrlp me
  */
 export async function getPosts(req, res) {
   const groupId = req.query.groupId ?? null;
+  const id = req.user.id;
+  const groups = await modelgroup.findUserGroups(id);
+
+  if (groupId && !groups.some((group) => group.id === groupId)) {
+    return res.status(403).send();
+  }
   const data = await model.findPosts(groupId);
   res.status(200).json(data);
 }

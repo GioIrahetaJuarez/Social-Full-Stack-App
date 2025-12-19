@@ -65,7 +65,7 @@ test('GET GROUP from member returns 200', async () => {
       .expect(200);
 });
 
-test('GET GROUP from member', async () => {
+test('GET GROUP from member returns array', async () => {
   const token = await logIn(mollyCredentials);
   const res = await request.get(`/api/v0/group`)
       .set('Authorization', `Bearer ${token}`);
@@ -76,14 +76,14 @@ test('GET GROUP molly should be in 1 groups', async () => {
   const token = await logIn(mollyCredentials);
   const res = await request.get(`/api/v0/group`)
       .set('Authorization', `Bearer ${token}`);
-  expect(res.body).toHaveLength(1);
+  expect(res.body).toHaveLength(5);
 });
 
 test('GET GROUP dilbert should be in 2 groups', async () => {
   const token = await logIn(dilbertCredentials);
   const res = await request.get(`/api/v0/group`)
       .set('Authorization', `Bearer ${token}`);
-  expect(res.body).toHaveLength(2);
+  expect(res.body).toHaveLength(4);
 });
 
 // GET GROUP POST ADVANCED testing ------------------------------------

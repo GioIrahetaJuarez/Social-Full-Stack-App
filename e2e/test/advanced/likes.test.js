@@ -1,5 +1,5 @@
 import {test, expect} from 'vitest';
-import {page, clickOn, getText, typeIn} from '../setup';
+import {page, clickOn, getText, typeIn, waitForTextChange} from '../setup';
 
 // Helper
 const dilbertCredentials = {
@@ -34,14 +34,14 @@ test('LIKES update on click', async () => {
   await login(dilbertCredentials);
   await clickOn(page,
       '[aria-label="post"]:first-of-type [aria-label="Like"]');
-  const likeCount = await getText(page,
-      '[aria-label="post"]:first-of-type [aria-label="likecount"]');
+  const likeCount = await waitForTextChange(page,
+      '[aria-label="post"]:first-of-type [aria-label="likecount"]', '0');
   expect(likeCount).toBe('1');
 }, 20000);
 
 test('LIKES shared across users', async () => {
   await login(micahCredentials);
-  const likeCount = await getText(page,
-      '[aria-label="post"]:first-of-type [aria-label="likecount"]');
+  const likeCount = await waitForTextChange(page,
+      '[aria-label="post"]:first-of-type [aria-label="likecount"]', '0');
   expect(likeCount).toBe('1');
 }, 20000);

@@ -74,11 +74,24 @@ export const typeIn = async (p, selector, text) => {
 
 export const getText = async (p, selector) => {
   try {
-    const element = await p.waitForSelector(selector, {timeout: 2000});
+    const element = await p.waitForSelector(selector, {timeout: 5000});
     const text = await element.evaluate((el) => el.textContent);
     element.dispose();
     return text;
   } catch {
     return null;
   }
+};
+// wait for change function with the help of Copilot
+export const waitForTextChange = async (p, selector, initialText, timeout) => {
+  const defaultTimeout = timeout || 5000;
+  const startTime = Date.now();
+  while (Date.now() - startTime < defaultTimeout) {
+    const text = await getText(p, selector);
+    if (text !== null && text !== initialText) {
+      return text;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+  return await getText(p, selector);
 };

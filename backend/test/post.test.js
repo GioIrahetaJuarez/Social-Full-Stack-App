@@ -94,7 +94,19 @@ test('GET posts with nonexistent ID', async () => {
       .expect(404);
 });
 
-test('GET forbidden post', async () => {
+test('GET forbidden group posts', async () => {
+  const loginResponse = await request.post('/api/v0/login')
+      .send(samCredentials);
+  const samsToken = loginResponse.body.accessToken;
+  const dilbertGroupResponse = await request.get(`/api/v0/group`)
+      .set('Authorization', `Bearer ${token}`);
+  const firstGroup = dilbertGroupResponse.body[0].id;
+  await request.get(`/api/v0/post?groupId=${firstGroup}`)
+      .set('Authorization', `Bearer ${samsToken}`)
+      .expect(403);
+});
+
+test('GET forbidden single post', async () => {
   const loginResponse = await request.post('/api/v0/login')
       .send(samCredentials);
   const samsToken = loginResponse.body.accessToken;
